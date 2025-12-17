@@ -1,13 +1,11 @@
 import { TodoList } from '@/type/todoList';
 import React from 'react';
 
-export default function Header({
-  children,
-  list,
-}: Readonly<{
+interface HeaderProps {
   children: React.ReactNode;
   list: TodoList;
-}>) {
+}
+export default function Header({ children, list }: HeaderProps) {
   return (
     <header className="pb-2 py-5">
       <div className=" flex justify-between items-center pb-3 ">
@@ -15,7 +13,7 @@ export default function Header({
         <div className="text-darkGrayColor font-semibold">
           <span>{list.length} tasks</span>
           <span> · </span>
-          <span>done</span>
+          <span>{list.filter((item) => item.done === true).length}done</span>
         </div>
       </div>
       {children}

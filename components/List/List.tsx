@@ -13,6 +13,8 @@ export default function List() {
   const [list, setList] = useState<TodoList>([]);
   const [keyword, setKeyword] = useState('');
   const [isDone, setIsDone] = useState<number>(1);
+  const [update, setUpdate] = useState('');
+  const [updateText, setUpdateText] = useState('');
 
   useEffect(() => {
     const task = localStorage.getItem('task');
@@ -44,13 +46,25 @@ export default function List() {
 
   const filtered = filtering();
 
+  useEffect(() => {
+    localStorage.setItem('task', JSON.stringify(list));
+  }, [list]);
+
   const handleToggle = (id: string) => {
     const inputId = id;
     const checkList = list.map((item) =>
       item.id === inputId ? { ...item, done: !item.done } : item
     );
-    localStorage.setItem('task', JSON.stringify(checkList));
     setList(checkList);
+  };
+
+  const handleUpdate = () => {
+    const updateList = list.map((item) =>
+      item.id === update ? { ...item, text: updateText.trim() } : item
+    );
+    setList(updateList);
+    setUpdate('');
+    setUpdateText('');
   };
 
   return (
@@ -84,10 +98,24 @@ export default function List() {
                       id={item.id}
                       onChange={() => handleToggle(item.id)}
                     />
-                    {item.text}
+                    {update === item.id ? (
+                      <input
+                        className="w-[520px] border border-grayColor rounded-sm pl-4 py-1 focus:outline-none"
+                        placeholder={item.text}
+                        value={updateText}
+                        onChange={(e) => setUpdateText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleUpdate();
+                          }
+                        }}
+                      />
+                    ) : (
+                      item.text
+                    )}
                   </div>
                   <div className="flex gap-5">
-                    <UpdateBtn />
+                    <UpdateBtn id={item.id} setUpdate={setUpdate} />
                     <DelBtn id={item.id} list={list} setList={setList} />
                   </div>
                 </li>
