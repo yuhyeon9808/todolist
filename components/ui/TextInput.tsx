@@ -21,9 +21,10 @@ export default function TextInput({
           placeholder="Add a new task..."
           className="w-[690px] h-[55px] bg-whiteColor border border-grayColor text-darkGrayColor rounded-md pl-4 focus:outline-none"
           value={text}
-          onChange={(e) => setText(e.target.value.trim())}
+          onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
+              if (text.trim() === '') return;
               const next = [
                 ...list,
                 { id: crypto.randomUUID(), text: text, done: false },

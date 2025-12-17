@@ -17,6 +17,7 @@ export default function AddBtn({
     <button
       className="w-[110px] h-[40px] bg-blueColor text-whiteColor text-20 rounded-sm gap-2 px-3 py-1 absolute right-5 top-1/2 translate-y-[-50%] flex items-center justify-center "
       onClick={() => {
+        if (text.trim() === '') return;
         const next = [
           ...list,
           { id: crypto.randomUUID(), text: text, done: false },
