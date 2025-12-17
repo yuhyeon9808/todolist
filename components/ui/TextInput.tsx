@@ -37,7 +37,7 @@ export default function TextInput({
         />
         <AddBtn text={text} list={list} setText={setText} setList={setList} />
       </div>
-      <p className="pt-3 pl-1">Press Enter to add task</p>
+      <p className="pt-3 pl-1 text-darkGrayColor">Press Enter to add task</p>
     </div>
   );
 }

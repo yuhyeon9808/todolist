@@ -12,6 +12,7 @@ export default function List() {
   const [text, setText] = useState('');
   const [list, setList] = useState<TodoList>([]);
   const [keyword, setKeyword] = useState('');
+  const [isDone, setIsDone] = useState<number>(1);
 
   useEffect(() => {
     const task = localStorage.getItem('task');
@@ -27,10 +28,30 @@ export default function List() {
     }
   }, []);
 
-  const filtered =
-    keyword.trim() === ''
-      ? list
-      : list.filter((item) => item.text.includes(keyword));
+  const filtering = () => {
+    if (keyword.trim() !== '') {
+      return list.filter((item) => item.text.includes(keyword));
+    }
+
+    if (isDone === 2) {
+      return list.filter((item) => item.done === true);
+    } else if (isDone === 3) {
+      return list.filter((item) => item.done === false);
+    } else {
+      return list;
+    }
+  };
+
+  const filtered = filtering();
+
+  const handleToggle = (id: string) => {
+    const inputId = id;
+    const checkList = list.map((item) =>
+      item.id === inputId ? { ...item, done: !item.done } : item
+    );
+    localStorage.setItem('task', JSON.stringify(checkList));
+    setList(checkList);
+  };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -44,7 +65,7 @@ export default function List() {
           />
         </Header>
         <div className="flex justify-between">
-          <FilteringBtn />
+          <FilteringBtn setIsDone={setIsDone} />
           <SearchInput keyword={keyword} setKeyword={setKeyword} />
         </div>
         <div className=" bg-whiteColor border border-grayColor my-10 rounded-md w-full h-auto min-h-[260px] ">
@@ -56,7 +77,13 @@ export default function List() {
                   className="flex justify-between pl-4 pr-10 border-b border-grayColor last:border-b-0 py-5"
                 >
                   <div className="flex gap-3">
-                    <input type="checkbox" className="w-[20px] h-[20px]" />
+                    <input
+                      type="checkbox"
+                      className="w-[20px] h-[20px]"
+                      checked={item.done}
+                      id={item.id}
+                      onChange={() => handleToggle(item.id)}
+                    />
                     {item.text}
                   </div>
                   <div className="flex gap-5">

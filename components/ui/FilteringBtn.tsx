@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import { TodoList } from '@/type/todoList';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 const BTN = [
   { id: 1, menu: 'All' },
@@ -7,7 +8,11 @@ const BTN = [
   { id: 3, menu: 'Done' },
 ];
 
-export default function FilteringBtn() {
+export default function FilteringBtn({
+  setIsDone,
+}: {
+  setIsDone: Dispatch<SetStateAction<number>>;
+}) {
   const [active, setActive] = useState(1);
 
   return (
@@ -16,7 +21,10 @@ export default function FilteringBtn() {
         <button
           key={item.id}
           type="button"
-          onClick={() => setActive(item.id)}
+          onClick={() => {
+            setActive(item.id);
+            setIsDone(item.id);
+          }}
           className={`flex-1 h-full border-r border-grayColor last:border-r-0
       ${active === item.id ? 'bg-blueColor text-whiteColor' : 'bg-transparent'}
     `}
